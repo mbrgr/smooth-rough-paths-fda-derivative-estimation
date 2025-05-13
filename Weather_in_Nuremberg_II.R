@@ -11,72 +11,44 @@ library(plotly)
 deriv_est_theme = theme_grey(base_size = 15) + 
   theme(plot.title = element_text(size = 14))
 
-
-load("data/weather_data_nuremberg.RData")
+#### Load and process the data ####
+load("data/weather_in_nuremberg/weather_data_nuremberg.RData")
 head(N, n = 7)
 dim(N)
 
-#### Test mit reduziertem N ####
-N0 = N[7:length(N$MESS_DATUM), ] # Jahre 2003 und 2004
-
+N0 = N[7:length(N$MESS_DATUM), ] 
 which(N$MESS_DATUM == "2012-01-01 00:00:00")
 which(N$MESS_DATUM == "2017-01-01 00:00:00")
-
-#### deal with NAs ####
-N0$TT_10 %>% is.na() %>% sum()
-
-summary(N0)
-N0$MONAT |> table()
-tail(N0)
-head(N0)
 
 N1 = N0 |> 
   mutate(UHRZEIT = as.character(UHRZEIT)) |> 
   dplyr::select(JAHR, MONAT, TAG, UHRZEIT, TT_10) |> 
   pivot_wider(names_from = UHRZEIT,
               values_from = TT_10)
-head(N0)
 
-
+# extend data to improve estimation at the boundaries
 N2 = cbind(N1[, 1:3], 
            rbind(NA, N1[-length(N1$JAHR), -(1:3)]), 
            N1[, -(1:3)], 
            rbind(N1[-1, -(1:3)], NA))
-#N2_alt = cbind(N1, N1[, -(1:3)], N1[, -(1:3)])
 
-(N2- N2_alt)[1:5,280:300 ]
-dim(N1)
-dim(N2) # passt
-head(N2)
-sum(is.na(N2))
-#view(t(N[1:3,]))
-#view(t(N2[1:3, ]))
-#view(t(N1[1:3, ]))
-
-to_unit_interval = function(x){
-  (x - min(x)) / (max(x) - min(x))
-}
-
-
-### entfernen der falschen Tage
+# remove days that have wrong values by the previous procedure
 N3 = N2[!(((N2[,3] %in% 28:29) & (N2[,2] == 2)) |
             (N2[,3] == 1) |
             ((N2[,3] == 31) & (N2[,2] %in% c(1,3,5,7,8,10,12))) |
             ((N2[,3] == 30) & (N2[,2] %in% c(4,6,9,11)))), ]
 sum(is.na(N3))
 
+# remove NA entries
 to_rm = apply(N3, 1, function(v){any(is.na(v))}) %>% which()
 N3 = N3[-to_rm, ]
-
 sum(is.na(N3))
 
+#### estimation ####
 p.eval = 144
 p = 144
-#p_eval_ext = p.eval + 2*add
-#x_design = seq(0, 1, length.out = p+1)[-(p+1)]
-#x_design_extended = c(x_design[(p+1-add):p] - 1, x_design, x_design[1:add] + 1)
-#x_design_extended_unit = to_unit_interval(x_design_extended)
 
+#evaluation set with extended interval to next an previous day
 x_test = seq(-1, 2, length.out = 3*p)
 
 W = local_polynomial_weights(3*p, 0.3, p, T, m = 2, del = 1, eval.type = "diagonal", x.design.grid = x_test) # watch out for evaluation
