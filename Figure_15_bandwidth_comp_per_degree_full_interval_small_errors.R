@@ -1,12 +1,17 @@
+#### description ####
+# Figures in the Appendix; analogue to Figure 2 but on the full interval [0,1] and smaller error variance
+
 #### packages ####
+library(locpol)
 library(tidyverse)
 library(biLocPol)
 library(parallel)
 library(future.apply)
 
-#### fucntions ####
+#### source functions ####
 source("functions.R")
-
+#### results ####
+load("R-Codes/data/bandwidth_comparison_per_degree_full_interval.RData")
 
 ##### Bandwidth Comparison: Different degrees  #####
 set.seed(264) 
@@ -37,12 +42,10 @@ erg_deg_2_df = data.frame(sup.err = unlist(erg_deg2), p =
                           h = unlist(H)
 ) 
 
-###### Figure 2 ######
-# Local quadratic estimator bandwidth comparison 
-
-Figure2 = ggplot(erg_deg_2_df[erg_deg_2_df$p %in% c(115, 175, 275, 400, 550, 1000),], aes(x = h, y = sup.err, color = p, pch = p)) + 
+###### Figure 15a ######
+Figure15a = ggplot(erg_deg_2_df, aes(x = h, y = sup.err, color = p, pch = p)) + 
   geom_point() + labs(subtitle = "n = 600") + lims(y = c(0.5, 20))
-Figure2
+Figure15a
 
 ggsave("Grafics/derivative_bandwidth_comparison_quad_full_interval_small_error.png", device = "png", width = 5, height = 3.8, units = "in")
 
@@ -67,11 +70,10 @@ erg_deg_3_df = data.frame(sup.err = unlist(erg_deg3), p =
 
 ###### Figure 3 ######
 # Local cubic estimator bandwidth comparison 
-Figure3 = ggplot(erg_deg_3_df[erg_deg_3_df$p %in% c(115, 175, 275, 400, 550, 1000),], aes(x = h, y = sup.err, color = p, pch = p)) + 
+Figure15b = ggplot(erg_deg_3_df, aes(x = h, y = sup.err, color = p, pch = p)) + 
   geom_point() + lims(y = c(0.5, 20)) + labs(subtitle = "n = 600") 
-Figure3
+Figure15b
 
-ggsave("Grafics/derivative_bandwidth_comparison_cubic_full_interval_small_error.png", device = "png", width = 5, height = 3.8, units = "in")
+ggsave("grafics/derivative_bandwidth_comparison_cubic_full_interval_small_error.png", device = "png", width = 5, height = 3.8, units = "in")
 
-save.image("R-Codes/data/bandwidth_comparison_per_degree_full_interval_small_error.RData")
-#load("R-Codes/data/bandwidth_comparison_per_degree_full_interval.RData")
+save.image("data/bandwidth_comparison_per_degree_full_interval_small_error.RData")

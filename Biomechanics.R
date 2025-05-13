@@ -1,3 +1,6 @@
+# Real Data application: Biomechanics data set
+# includes Figures 5,6,7,8,9,10
+
 #### source and packages ####
 source("functions.R")
 library(ffscb)
