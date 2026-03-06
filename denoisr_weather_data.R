@@ -60,7 +60,7 @@ N1_month = N1_woNA |>
     })
   })
 
-t0 =0.5
+# t0 =0.5
 denoisr_estimate = lapply(1:12, function(i) {
   estimate_H0_list(N1_month[[i]], t0_list = t0, k0_list = floor(k0)) 
   }
@@ -87,8 +87,10 @@ X <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
 H0 <- estimate_H0_list(X, t0_list = t0, k0_list = 14)
 plot(H0, type = "l")
 
-X <- generate_piecewise_fractional_brownian(N = 100, M = 300, 
+X_frac <- generate_piecewise_fractional_brownian(N = 100, M = 300, 
                                             H = c(0.2, 0.5, 0.8), 
                                             sigma = 0.05)
-H0 <- estimate_H0_list(X, t0_list = c(0.15, 0.5, 0.85), k0_list = c(2, 4, 6))
-H0 <- estimate_H0_list(X, t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
+H0_frac <- estimate_H0_list(X_frac, t0_list = t0, k0_list = rep(c(2,4,6), each = 144/3))
+plot(H0_frac, type = "l")
+H0_frac_2 <- estimate_H0_list(X_frac, t0_list = t0, k0_list = 6)
+plot(H0_frac_2, type = "l")
