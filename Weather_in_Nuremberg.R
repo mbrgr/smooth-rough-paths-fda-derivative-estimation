@@ -24,7 +24,7 @@ which(N$MESS_DATUM == "2012-01-01 00:00:00")
 which(N$MESS_DATUM == "2017-01-01 00:00:00")
 
 N1 = N0 |> 
-  mutate(time = as.character(time)) |> 
+  mutate(time = as.character(UHRZEIT)) |> 
   dplyr::select(JAHR, MONAT, TAG, time, TT_10) |> 
   pivot_wider(names_from = time,
               values_from = TT_10)
@@ -48,7 +48,7 @@ N3 = N3[-to_rm, ]
 sum(is.na(N3))
 
 #### Mean Derivative Estimation ####
-
+p = 144
 N_bar = matrix(0, 12, 3 * p)
 
 for(m in 1:12){
@@ -98,7 +98,7 @@ cbind(deriv_tibble, rep(time, each = 1728/144)) |>
   scale_linetype_manual(values = c(2,3,4,4,4,1:3,5,5,5,1)) +
   deriv_est_theme
 
-ggsave("grafics/derivatives_mean_temperature.png", device = "png",
+ggsave("grafics/derivatives_mean_temperature.pdf", device = "pdf",
        width = 5, height = 4, units = "in")
 
 # test if the estimation produces reliable results 
@@ -144,7 +144,7 @@ ggplot() +
                               y = c(-.1, 0.3, 2.5, 6.6, 10.2, 14.25, 16, 15.5, 11.8, 7.6, 4.2, 1.5), 
                               month = gl(12,1)), aes(label = month, x = x, y = y), hjust = 0.4)
 
-ggsave("grafics/mean_temperature.png", device = "png",
+ggsave("grafics/mean_temperature.pdf", device = "pdf",
        width = 5, height = 4, units = "in")
 
 #### (Co)-Variance Estimation ####
@@ -219,12 +219,12 @@ final_est %>%
   scale_discrete_manual(
     aesthetics = c("color", "linetype"),
     values = c("G10" = 2,"G01" = 4), 
-    name = "Deriv.",
+    name = "deriv.",
     labels = c("G10" = expression(italic(d)^{"(1,0)"}*Gamma), "G01" = expression(italic(d)^{"(0,1)"}*Gamma))
   ) +
   scale_x_continuous(breaks = c(time[25], time[121]))
 
-ggsave("grafics/weather_part_deriv_gamma_diagonal_all_months.png", device = "png", width = 8, height =6, units = "in")
+ggsave("grafics/weather_part_deriv_gamma_diagonal_all_months.pdf", device = "pdf", width = 8, height =6, units = "in")
 
 ##### Figure 13 #####
 final_est %>% 
@@ -236,11 +236,11 @@ final_est %>%
   scale_discrete_manual(
     aesthetics = c("color", "linetype"),
     values = c("G10" = 2,"G01" = 4), 
-    name = "Deriv.",
+    name = "deriv.",
     labels = c("G10" = expression(italic(d)^{"(1,0)"}*Gamma), "G01" = expression(italic(d)^{"(0,1)"}*Gamma))
   )  + 
   scale_x_continuous(breaks = c(time[25], time[73], time[121], time[169], time[217]))
 
-ggsave("grafics/weather_part_deriv_gamma_diagonal.png", device = "png", width = 5, height = 4, units = "in")
+ggsave("grafics/weather_part_deriv_gamma_diagonal.pdf", device = "pdf", width = 5, height = 4, units = "in")
 
 #save.image("data/weather_covariance_derivative_estimation.RData")

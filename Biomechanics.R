@@ -70,7 +70,7 @@ ggplot() + geom_point(aes(x = stance_phase, y = pressure, group = person),
                       df.both[df.both$person != "mean", ], size = .2) + facet_wrap(shoe ~.)+ 
   labs(x = "% of stance phase", y = "Nm/Kg", subtitle = "Pressure curves of normal and extra cushioned shoe") + 
   deriv_est_theme
-ggsave("grafics/pressure_curves.png", device = "png",
+ggsave("grafics/pressure_curves.pdf", device = "pdf",
        width = 5, height = 4, units = "in")
 
 normal |> 
@@ -87,7 +87,7 @@ ggplot()  +
              size = .9, col = "black") +
   labs(x = "% of stance phase", y = "Nm/Kg", subtitle = "Difference of pressure") + 
   deriv_est_theme
-ggsave("grafics/diff_pressure_curves.png", device = "png",
+ggsave("grafics/diff_pressure_curves.pdf", device = "pdf",
        width = 5, height = 4, units = "in")
 
 
@@ -132,12 +132,12 @@ deriv_tibble = tibble(estimation = c(est_extra_derivative$beta1,
 deriv_tibble |>
   filter(cushion != "diff") |> 
   ggplot(aes(x = x, y = estimation)) + 
-  geom_line(aes(col = cushion, lty = cushion), size = 1) +
+  geom_line(aes(col = cushion, lty = cushion), linewidth = 1) +
   labs(x = "% of stance phase", y = NULL, 
        title = "Derivative estimation for pressure curves")  + 
   scale_linetype_manual(values = c(1,4)) + 
   deriv_est_theme
-ggsave("grafics/deriv_est.png", device = "png",
+ggsave("grafics/deriv_est.pdf", device = "pdf",
        width = 5, height = 4, units = "in")
 
 
@@ -153,7 +153,7 @@ rbind(est_extra_derivative, est_normal_derivative) |>
   labs(y = "Nm/kg", x = "d/dx Nm/kg", title = "Phase-plane plot") + 
   scale_shape_manual(values = c(3,6)) + 
   deriv_est_theme
-ggsave("grafics/phase_plane.png", device = "png",
+ggsave("grafics/phase_plane.pdf", device = "pdf",
        width = 5, height = 4, units = "in")
 
 ##### Figure 8 #####
@@ -164,7 +164,7 @@ deriv_tibble |>
   labs(x = "% of stance phase", y = NULL, 
        title = "Derivative estimation for difference") + 
   deriv_est_theme
-ggsave("grafics/deriv_est_diff.png", device = "png",
+ggsave("grafics/deriv_est_diff.pdf", device = "pdf",
        width = 5, height = 4, units = "in")
 
 #### estimation of derivative of the covariance kernel ####
@@ -197,7 +197,7 @@ diag_est_tib |>
     labels = c(expression(italic(d)^{"(1,0)"}*Gamma), expression(italic(d)^{"(0,1)"}*Gamma))
   ) 
 
-ggsave("grafics/part_deriv_gamma_diagonal.png", device = "png", width = 5, height = 4, units = "in")
+ggsave("grafics/part_deriv_gamma_diagonal.pdf", device = "pdf", width = 5, height = 4, units = "in")
 
 
 
