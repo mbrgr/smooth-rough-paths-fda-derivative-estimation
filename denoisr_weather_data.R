@@ -42,6 +42,7 @@ names(N_list) <- apply(N1_woNA[, 1:3], 1, paste, collapse = "_")
 M = 6 * 24
 k0 = M * exp( - log(log(M))^2 )
 #t0 = seq(0,1, length.out = 12)
+k0 = 2
 
 denoisr_estimate_full = 
   estimate_H0_list(N_list, t0_list = t0, k0_list = floor(k0))
@@ -84,13 +85,15 @@ denoisr_df |>
 #### example ####
 par(mfrow = c(1,1))
 X <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
-H0 <- estimate_H0_list(X, t0_list = t0, k0_list = 14)
-plot(H0, type = "l")
+M = 300
+k0 = M * exp( - log(log(M))^2 )
+H0 <- estimate_H0_list(X, t0_list = t0, k0_list = floor(k0))
+plot(H0 ~ t0, type = "l")
 
 X_frac <- generate_piecewise_fractional_brownian(N = 100, M = 300, 
                                             H = c(0.2, 0.5, 0.8), 
                                             sigma = 0.05)
 H0_frac <- estimate_H0_list(X_frac, t0_list = t0, k0_list = rep(c(2,4,6), each = 144/3))
-plot(H0_frac, type = "l")
-H0_frac_2 <- estimate_H0_list(X_frac, t0_list = t0, k0_list = 6)
-plot(H0_frac_2, type = "l")
+plot(H0_frac ~ t0, type = "l")
+H0_frac_2 <- estimate_H0_list(X_frac, t0_list = t0, k0_list = k0)
+plot(H0_frac_2 ~ t0, type = "l")
