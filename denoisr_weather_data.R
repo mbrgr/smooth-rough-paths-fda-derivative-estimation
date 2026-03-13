@@ -7,6 +7,15 @@ library(ggplot2)
 
 ?estimate_H0_list()
 
+deriv_est_theme = theme_grey(base_size = 15) + 
+  theme(plot.title = element_text(size = 14))
+
+farben = c( "#a6cee3", "#03396c",  # Blau-Töne
+            "#33a02c", "#66c21f", "#006400",  # Grün-Töne
+            "#e31a1c", "#fb9a99", "#990000",  # Rot-Töne
+            "#ff7f00", "#ffb300", "#b15928",  # Gelb-Orange-Töne
+            "#1f78b4")
+
 t0 = seq(0, 1, length.out = 24*6 + 1)[-145]
 t0
 
@@ -17,7 +26,7 @@ N0 = N[7:length(N$MESS_DATUM), ]
 N0$MESS_DATUM |> as.character()
 class(N0$MESS_DATUM)
 N0$time = N0$MESS_DATUM |> format(format = "%H:%M")
-
+length(N0$time)
 
 N1 = N0 |> 
   dplyr::select(JAHR, MONAT, TAG, time, TT_10) |> 
@@ -42,7 +51,7 @@ names(N_list) <- apply(N1_woNA[, 1:3], 1, paste, collapse = "_")
 M = 6 * 24
 k0 = M * exp( - log(log(M))^2 )
 #t0 = seq(0,1, length.out = 12)
-k0 = 2
+#k0 = 2
 
 denoisr_estimate_full = 
   estimate_H0_list(N_list, t0_list = t0, k0_list = floor(k0))
@@ -80,7 +89,17 @@ denoisr_df = data.frame(est = unlist(denoisr_estimate),
               c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")))
 denoisr_df |> 
   ggplot(aes(x = time, y = est, col = month)) + 
-  geom_line()
+  geom_line() + 
+  labs(title = "Estimating the pointwise regularity with denoisr", 
+       y = "estimated smoothness", x = "time" ) +
+  facet_wrap(.~month) +
+  scale_colour_manual(values = farben) + 
+  scale_x_continuous(
+    breaks = c(.25, .5, .75),
+    labels = c("06:00", "12:00", "18:00")
+  ) + deriv_est_theme
+ggsave("grafics/denoisr_weater_all_months_k11.pdf", device = "pdf",
+       width = 7, height = 5, units = "in")
 
 #### example ####
 par(mfrow = c(1,1))
