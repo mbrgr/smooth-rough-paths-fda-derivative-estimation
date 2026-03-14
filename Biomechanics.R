@@ -193,7 +193,7 @@ diag_est_tib |>
   scale_discrete_manual(
     aesthetics = c("color", "linetype"),
     values = c(2,4), 
-    name = "Deriv.",
+    name = "deriv.",
     labels = c(expression(italic(d)^{"(1,0)"}*Gamma), expression(italic(d)^{"(0,1)"}*Gamma))
   ) 
 

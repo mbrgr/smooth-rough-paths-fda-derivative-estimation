@@ -49,7 +49,7 @@ Figure14a = ggplot(erg_deg_2_df, aes(x = h, y = sup.err, color = p, pch = p)) +
   geom_point() + labs(subtitle = "n = 600") + lims(y = c(0.5, 20))
 Figure14a
 
-ggsave("grafics/derivative_bandwidth_comparison_quad_full_interval.png", device = "png", width = 5, height = 3.8, units = "in")
+ggsave("grafics/derivative_bandwidth_comparison_quad_full_interval.pdf", device = "pdf", width = 5, height = 3.8, units = "in")
 
 ##### Degree = 3 #####
 set.seed(264) # same seed as for degree = 2
@@ -76,6 +76,6 @@ Figure14b = ggplot(erg_deg_3_df, aes(x = h, y = sup.err, color = p, pch = p)) +
   geom_point() + lims(y = c(0.5, 20)) + labs(subtitle = "n = 600") 
 Figure14b
 
-ggsave("grafics/derivative_bandwidth_comparison_cubic_full_interval.png", device = "png", width = 5, height = 3.8, units = "in")
+ggsave("grafics/derivative_bandwidth_comparison_cubic_full_interval.pdf", device = "pdf", width = 5, height = 3.8, units = "in")
 
 save.image("data/bandwidth_comparison_per_degree_full_interval.RData")

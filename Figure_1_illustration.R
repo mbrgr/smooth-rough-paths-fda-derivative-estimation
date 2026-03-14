@@ -75,7 +75,7 @@ ggplot() +
   labs(title = "Mean function", y = NULL, x = NULL, colour = NULL, lty = NULL) + 
   deriv_est_theme
 
-ggsave("grafics/mean_est_n10_p101.png", device = "png", width = 7, height = 3.8, units = "in")
+ggsave("grafics/mean_est_n10_p101.pdf", device = "pdf", width = 7, height = 3.8, units = "in")
 
 ###### First Derivative ######
 
@@ -104,4 +104,5 @@ mu_deriv_tibble |>
   labs(title = "First derivative", y = NULL, x = NULL, colour = NULL, lty = NULL) + 
   deriv_est_theme
 
-ggsave("grafics/derivative_est_n10_p101.png", device = "png", width = 7, height = 3.8, units = "in")
+ggsave("grafics/derivative_est_n10_p101.pdf", device = "pdf", width = 7, height = 3.8, units = "in")
+

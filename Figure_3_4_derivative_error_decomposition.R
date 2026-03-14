@@ -43,7 +43,7 @@ ggplot(error_decomp_deg3, aes(p, sup.error, lty = term, pch = term, col = term))
   geom_line() +
   lims(x = c(0, 1000), y= c(0, 1.35)) + 
   labs(subtitle = "n = 600") + deriv_est_theme
-ggsave("grafics/derivative_error_decomp_n600_cubic.png", device = "png", width = 5, height = 3.8, units = "in")
+ggsave("grafics/derivative_error_decomp_n600_cubic.pdf", device = "pdf", width = 5, height = 3.8, units = "in")
 
 
 
@@ -95,7 +95,7 @@ ggplot(df.erg, aes(n, sup.error, lty = term, pch = term, col = term)) +
   lims(y = c(0.1, 2.9)) + 
   deriv_est_theme
 
-ggsave("grafics/derivative_error_decomp_p300_cubic.png", device = "png",
+ggsave("grafics/derivative_error_decomp_p300_cubic.pdf", device = "pdf",
        width = 5, height = 3.8, units = "in")
 save.image("data/error_decomposition.RData")
 

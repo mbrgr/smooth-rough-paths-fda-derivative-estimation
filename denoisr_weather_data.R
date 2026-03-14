@@ -10,6 +10,7 @@ library(ggplot2)
 deriv_est_theme = theme_grey(base_size = 15) + 
   theme(plot.title = element_text(size = 14))
 
+# use colour theme from previous analysis
 farben = c( "#a6cee3", "#03396c",  # Blau-Töne
             "#33a02c", "#66c21f", "#006400",  # Grün-Töne
             "#e31a1c", "#fb9a99", "#990000",  # Rot-Töne
@@ -36,31 +37,19 @@ N1 = N0 |>
 #### for all days together ####
 
 N1 |> dim() # 7542
-every_7 = seq(1, 7542, by = 10)
-N1_7 = N1[every_7, ]
-days_with_NA = apply(N1_7[, -c(1,2,3)], 1, function(x){any(is.na(x))})
-N1_woNA = N1_7[!days_with_NA, ]
+days_with_NA = apply(N1[, -c(1,2,3)], 1, function(x){any(is.na(x))})
+N1_woNA = N1[!days_with_NA, ]
 N1_woNA |> dim() # 1054
 
-N_list = apply(N1_woNA, 1, function(day) {
-  tmp_list = list(t = t0, x = day[-(1:3)])
-})
 
-names(N_list) <- apply(N1_woNA[, 1:3], 1, paste, collapse = "_")
 
+# set M and k0 according to the paper
 M = 6 * 24
 k0 = M * exp( - log(log(M))^2 )
 #t0 = seq(0,1, length.out = 12)
 #k0 = 2
 
-denoisr_estimate_full = 
-  estimate_H0_list(N_list, t0_list = t0, k0_list = floor(k0))
-
-par(mfrow = c(1,1))
-plot(denoisr_estimate_full ~ t0, type = "l", ylim = c(0,4))
-
 #### seperately for the months ####
-
 N1_woNA |> dim() # 1054
 N1_month = N1_woNA |> 
   dplyr::group_by(MONAT) |> 
@@ -76,13 +65,6 @@ denoisr_estimate = lapply(1:12, function(i) {
   }
 )
 
-plot(denoisr_estimate[[4]] ~ t0, type = "l", ylim =c(0,4))
-par(mfrow = c(4,3))
-for(i in 1:12){
-  plot(denoisr_estimate[[i]] ~ t0, type = "l", ylim =c(0,4))
-  abline(h = 1, lty = 2)
-}
-
 denoisr_df = data.frame(est = unlist(denoisr_estimate), 
                         time = rep(t0, 12),
                         month = gl(12, 144, labels = 
@@ -97,11 +79,11 @@ denoisr_df |>
   scale_x_continuous(
     breaks = c(.25, .5, .75),
     labels = c("06:00", "12:00", "18:00")
-  ) + deriv_est_theme
+  ) 
 ggsave("grafics/denoisr_weater_all_months_k11.pdf", device = "pdf",
        width = 7, height = 5, units = "in")
 
-#### example ####
+#### example denoisr authors ####
 par(mfrow = c(1,1))
 X <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
 M = 300

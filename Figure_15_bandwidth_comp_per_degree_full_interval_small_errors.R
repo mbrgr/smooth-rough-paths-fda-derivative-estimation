@@ -11,7 +11,7 @@ library(future.apply)
 #### source functions ####
 source("functions.R")
 #### results ####
-load("R-Codes/data/bandwidth_comparison_per_degree_full_interval.RData")
+load("data/bandwidth_comparison_per_degree_full_interval_small_error.RData")
 
 ##### Bandwidth Comparison: Different degrees  #####
 set.seed(264) 
@@ -47,7 +47,7 @@ Figure15a = ggplot(erg_deg_2_df, aes(x = h, y = sup.err, color = p, pch = p)) +
   geom_point() + labs(subtitle = "n = 600") + lims(y = c(0.5, 20))
 Figure15a
 
-ggsave("Grafics/derivative_bandwidth_comparison_quad_full_interval_small_error.png", device = "png", width = 5, height = 3.8, units = "in")
+ggsave("Grafics/derivative_bandwidth_comparison_quad_full_interval_small_error.pdf", device = "pdf", width = 5, height = 3.8, units = "in")
 
 ###### Degree = 3 ######
 set.seed(264) # same seed as for degree = 2
@@ -74,6 +74,6 @@ Figure15b = ggplot(erg_deg_3_df, aes(x = h, y = sup.err, color = p, pch = p)) +
   geom_point() + lims(y = c(0.5, 20)) + labs(subtitle = "n = 600") 
 Figure15b
 
-ggsave("grafics/derivative_bandwidth_comparison_cubic_full_interval_small_error.png", device = "png", width = 5, height = 3.8, units = "in")
+ggsave("grafics/derivative_bandwidth_comparison_cubic_full_interval_small_error.pdf", device = "pdf", width = 5, height = 3.8, units = "in")
 
 save.image("data/bandwidth_comparison_per_degree_full_interval_small_error.RData")
